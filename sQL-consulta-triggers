@@ -1,0 +1,14 @@
+SELECT
+o.name as [Trigger Name],
+CASE WHEN o.type = 'TR' THEN 'SQL DML Trigger'
+     WHEN o.type = 'TA' THEN 'DML Assembly Trigger' END
+     AS [Trigger Type],
+sc.name AS [Schema_Name],
+OBJECT_NAME(parent_object_id) as [Table Name],
+o.create_date [Trigger Create Date], 
+o.modify_date [Trigger Modified Date] 
+FROM sys.objects o
+INNER JOIN sys.schemas sc ON o.schema_id = sc.schema_id
+WHERE (type = 'TR' OR type = 'TA')
+AND ( DATEDIFF(D,create_date, GETDATE()) < 7 OR
+    DATEDIFF(D,modify_date, GETDATE()) < 7) -- Last 7 days
