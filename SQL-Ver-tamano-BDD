@@ -1,0 +1,4 @@
+select db_name() as dbname,
+name as filename,
+size/128.0 as currentsize,
+size/128.0 - cast(fileproperty(name,'SpaceUsed') as int)/128.0 as freespace from sys.database_files
